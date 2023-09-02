@@ -1,0 +1,44 @@
+#!/bin/bash
+
+#Users and Hosts
+read -p "Enter Privateuser" privateuser
+read -p "Enter Publicuser" publicuser
+
+#privateuser2="
+read -p "Enter Privateuser" privatehost
+read -p "Enter Publicuser" publicuser
+
+#commands
+cmd1="sudo apt update -y && sudo apt full-upgrade -y"
+cmd2="sudo ssh -i /home/ubuntu/.ssh/Key1.pem $privateuser1@$privatehost $cmd1"
+
+#Key path
+Key_path="/home/sudox/bootcon/ssh_keys/Key1.pem"
+
+# update first machine
+echo "Starting first update"
+sleep 1
+exit_status=$?
+if [[ $exit_status -eq 0 ]]; then
+    ssh -i $Key_path $publicuser@$publichost $cmd1
+else
+    echo "update failed"
+    exit
+fi
+echo "$publichost has been upgraded"
+
+#Wait time before next update
+sleep 12
+
+# Second machine
+echo "Starting second update"
+exit_status=$?
+if [[ $exit_status -eq 0 ]]; then
+    ssh -i $Key_path $publicuser@$publichost $cmd2
+else   
+  echo "update failed"
+  exit
+fi
+echo -e "$privatehost has been upgraded"
+sleep 8
+exit
